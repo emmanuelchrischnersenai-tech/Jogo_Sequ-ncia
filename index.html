@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SEQUÊNCIA - Desafio Matemático</title>
+    <style>
+        :root {
+            --bg-dark: #0e131f;
+            --bg-card: rgba(22, 29, 45, 0.88);
+            --bg-card-border: rgba(16, 185, 129, 0.25);
+            --primary: #10b981;
+            --primary-hover: #059669;
+            --primary-glow: rgba(16, 185, 129, 0.35);
+            --secondary: #059669;
+            --accent-pink: #ff5722;
+            --accent-gold: #fbbf24;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --input-bg: rgba(0, 0, 0, 0.3);
+            --input-border: rgba(255, 255, 255, 0.12);
+            --btn-bg: linear-gradient(135deg, #1e293b, #0f172a);
+            --btn-text: #ffffff;
+            --card-sub-bg: rgba(255, 255, 255, 0.04);
+            --seq-num-bg: rgba(255, 255, 255, 0.06);
+            --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        [data-theme="light"] {
+            --bg-dark: #e2e8f0;
+            --bg-card: rgba(255, 255, 255, 0.92);
+            --bg-card-border: rgba(16, 185, 129, 0.35);
+            --primary: #059669;
+            --primary-hover: #047857;
+            --primary-glow: rgba(5, 150, 105, 0.2);
+            --secondary: #047857;
+            --accent-pink: #ea580c;
+            --accent-gold: #d97706;
+            --accent-green: #059669;
+            --accent-red: #dc2626;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --input-bg: rgba(241, 245, 249, 0.9);
+            --input-border: rgba(148, 163, 184, 0.3);
+            --btn-bg: linear-gradient(135deg, #cbd5e1, #94a3b8);
+            --btn-text: #0f172a;
+            --card-sub-bg: rgba(0, 0, 0, 0.04);
+            --seq-num-bg: rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 15%, var(--primary-glow) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.12) 0%, transparent 40%);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Top Header Common */
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--input-border);
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .brand-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: 1.5px;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        .icon-btn {
+            background: var(--card-sub-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-main);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.1rem;
+        }
+
+        .icon-btn:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: var(--primary-glow);
+        }
+
+        /* Telas */
+        .screen {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Typography & Utility */
+        h1, h2, h3 {
+            text-align: center;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            text-align: center;
+            margin-top: 4px;
+            margin-bottom: 20px;
+        }
+
+        /* Botões Estilizados */
+        .btn {
+            background: var(--btn-bg);
+            border: 1px solid var(--input-border);
+            color: var(--btn-text);
+            padding: 14px 20px;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            box-shadow: 0 6px 20px var(--primary-glow);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            color: #ffffff;
+            font-weight: 800;
+            box-shadow: 0 4px 20px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 25px var(--primary-glow);
+            filter: brightness(1.1);
+        }
+
+        /* Inputs */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 18px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 1.05rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        /* Seleção de Dificuldade */
+        .difficulty-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .diff-card {
+            background: var(--card-sub-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 16px;
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .diff-card:hover {
+            background: var(--primary-glow);
+            transform: translateY(-2px);
+        }
+
+        .diff-card.selected {
+            border-color: var(--primary);
+            background: var(--primary-glow);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .diff-name {
+            font-weight: 800;
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .diff-facil { color: var(--accent-green); }
+        .diff-normal { color: var(--primary); }
+        .diff-dificil { color: var(--secondary); }
+        .diff-insano { color: var(--accent-pink); }
+
+        .diff-info {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        /* Tela de Jogo */
+        .game-hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: var(--card-sub-bg);
+            padding: 12px 18px;
+            border-radius: 16px;
+            border: 1px solid var(--input-border);
+        }
+
+        .hud-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hud-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .hud-value {
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+        .hud-score { color: var(--accent-gold); }
+        .hud-combo { 
+            color: var(--accent-pink);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Barra de Tempo */
+        .timer-container {
+            width: 100%;
+            height: 8px;
+            background: var(--card-sub-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .timer-bar {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--primary));
+            border-radius: 10px;
+            transition: width 0.1s linear, background-color 0.3s;
+        }
+
+        /* Card da Sequência */
+        .sequence-card {
+            background: var(--card-sub-bg);
+            border: 2px solid var(--bg-card-border);
+            border-radius: 20px;
+            padding: 30px 15px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: inset 0 0 20px var(--primary-glow);
+            position: relative;
+        }
+
+        .sequence-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .seq-num {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--text-main);
+            background: var(--seq-num-bg);
+            border: 1px solid var(--input-border);
+            padding: 10px 16px;
+            border-radius: 12px;
+            min-width: 52px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .seq-target {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: var(--primary-glow);
+            animation: pulse-border 1.5s infinite alternate;
+        }
+
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 5px var(--primary-glow); }
+            100% { box-shadow: 0 0 20px var(--primary); }
+        }
+
+        /* Alternativas */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 15px;
+        }
+
+        .option-btn {
+            background: var(--card-sub-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-main);
+            padding: 20px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-btn:hover {
+            background: var(--primary-glow);
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .option-btn.correct {
+            background: rgba(16, 185, 129, 0.25) !important;
+            border-color: var(--accent-green) !important;
+            color: var(--accent-green) !important;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+            animation: pop 0.3s ease;
+        }
+
+        .option-btn.wrong {
+            background: rgba(239, 68, 68, 0.25) !important;
+            border-color: var(--accent-red) !important;
+            color: var(--accent-red) !important;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+            animation: shake 0.4s ease;
+        }
+
+        /* Toast Feedback Overlay */
+        .feedback-toast {
+            text-align: center;
+            font-weight: 800;
+            font-size: 1rem;
+            min-height: 28px;
+            transition: opacity 0.2s;
+        }
+
+        .feedback-toast.success { color: var(--accent-green); }
+        .feedback-toast.error { color: var(--accent-red); }
+
+        /* Tela de Resultados */
+        .results-card {
+            background: var(--card-sub-bg);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--input-border);
+        }
+
+        .score-display {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .score-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .score-number {
+            font-size: 3.2rem;
+            font-weight: 900;
+            color: var(--accent-gold);
+            text-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+            line-height: 1.1;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .stat-item {
+            background: var(--card-sub-bg);
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--input-border);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .stat-value {
+            font-size: 1.15rem;
+            font-weight: 800;
+            margin-top: 2px;
+        }
+
+        /* Ranking Leaderboard */
+        .rank-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            background: var(--card-sub-bg);
+            padding: 4px;
+            border-radius: 12px;
+        }
+
+        .rank-tab {
+            flex: 1;
+            padding: 8px 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .rank-tab.active {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .my-stats-banner {
+            background: var(--primary-glow);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+
+        .leaderboard-list {
+            max-height: 260px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 4px;
+        }
+
+        .leaderboard-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .leaderboard-list::-webkit-scrollbar-thumb {
+            background: var(--input-border);
+            border-radius: 4px;
+        }
+
+        .rank-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: var(--card-sub-bg);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            border: 1px solid var(--input-border);
+        }
+
+        .rank-item.top-1 { border-color: rgba(255, 215, 0, 0.6); background: rgba(255, 215, 0, 0.1); }
+        .rank-item.top-2 { border-color: rgba(192, 192, 192, 0.6); background: rgba(192, 192, 192, 0.1); }
+        .rank-item.top-3 { border-color: rgba(205, 127, 50, 0.6); background: rgba(205, 127, 50, 0.1); }
+
+        .rank-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .rank-badge {
+            width: 24px;
+            text-align: center;
+        }
+
+        .rank-score {
+            font-weight: 800;
+            color: var(--accent-gold);
+        }
+
+        /* Animações Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsividade */
+        @media (max-width: 480px) {
+            #app-container {
+                min-height: 100vh;
+                border-radius: 0;
+            }
+            .seq-num {
+                font-size: 1.4rem;
+                padding: 8px 12px;
+                min-width: 44px;
+            }
+            .option-btn {
+                padding: 16px;
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        <!-- Top Bar -->
+        <div class="header-bar">
+            <div class="brand-title">SEQUÊNCIA</div>
+            <div class="header-controls">
+                <button class="icon-btn" id="theme-toggle-btn" title="Alternar Tema Claro/Escuro">🌙</button>
+                <button class="icon-btn" id="audio-toggle-btn" title="Alternar Som">🔊</button>
+            </div>
+        </div>
+
+        <!-- TELAS -->
+        <!-- 1. TELA INICIAL / MENU -->
+        <div id="screen-menu" class="screen">
+            <h1>NOVO JOGO</h1>
+            <p class="subtitle">Descubra o padrão e encontre o próximo número!</p>
+
+            <div class="input-group">
+                <label for="player-nickname">Apelido do Jogador</label>
+                <input type="text" id="player-nickname" class="input-field" placeholder="Jogador" maxlength="12" value="" onfocus="this.select()">
+            </div>
+
+            <div class="input-group">
+                <label>Selecione a Dificuldade</label>
+                <div class="difficulty-grid">
+                    <div class="diff-card selected" data-diff="facil">
+                        <div class="diff-name diff-facil">Fácil <span>🟢</span></div>
+                        <div class="diff-info">Soma e Subtração<br>10 Perguntas · 20s</div>
+                    </div>
+                    <div class="diff-card" data-diff="normal">
+                        <div class="diff-name diff-normal">Normal <span>🔵</span></div>
+                        <div class="diff-info">4 Operações<br>12 Perguntas · 15s</div>
+                    </div>
+                    <div class="diff-card" data-diff="dificil">
+                        <div class="diff-name diff-dificil">Difícil <span>🟣</span></div>
+                        <div class="diff-info">Alternadas<br>15 Perguntas · 10s</div>
+                    </div>
+                    <div class="diff-card" data-diff="insano">
+                        <div class="diff-name diff-insano">Insano <span>🔥</span></div>
+                        <div class="diff-info">Padrões Complexos<br>20 Perguntas · 7s</div>
+                    </div>
+                </div>
+            </div>
+
+            <button id="start-game-btn" class="btn btn-primary" style="margin-top: auto; width: 100%;">
+                INICIAR DESAFIO ⚡
+            </button>
+            <button id="view-ranking-btn" class="btn" style="margin-top: 10px; width: 100%;">
+                🏆 VER RANKING
+            </button>
+        </div>
+
+        <!-- 2. TELA DE JOGO -->
+        <div id="screen-game" class="screen hidden">
+            <div class="game-hud">
+                <div class="hud-item">
+                    <span class="hud-label">Questão</span>
+                    <span class="hud-value" id="hud-question-count">1/10</span>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">Pontuação</span>
+                    <span class="hud-value hud-score" id="hud-score">0</span>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">Combo</span>
+                    <span class="hud-value hud-combo" id="hud-combo">1x</span>
+                </div>
+            </div>
+
+            <div class="timer-container">
+                <div class="timer-bar" id="timer-bar"></div>
+            </div>
+
+            <div class="sequence-card">
+                <div class="sequence-display" id="sequence-display">
+                    <!-- Gerado dinamicamente via JS -->
+                </div>
+            </div>
+
+            <div class="options-grid" id="options-grid">
+                <!-- 4 Botões gerados via JS -->
+            </div>
+
+            <div class="feedback-toast" id="feedback-toast"></div>
+        </div>
+
+        <!-- 3. TELA DE RESULTADO -->
+        <div id="screen-results" class="screen hidden">
+            <h2>RESULTADO</h2>
+            <p class="subtitle">Desempenho da Partida</p>
+
+            <div class="results-card">
+                <div class="score-display">
+                    <div class="score-title">Pontuação Total</div>
+                    <div class="score-number" id="res-score">0</div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Acertos</div>
+                        <div class="stat-value" id="res-hits">0/0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Precisão</div>
+                        <div class="stat-value" id="res-accuracy">0%</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Maior Combo</div>
+                        <div class="stat-value" id="res-combo">0 🔥</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Tempo Médio</div>
+                        <div class="stat-value" id="res-avg-time">0.0s</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: auto;">
+                <button id="res-restart-btn" class="btn btn-primary">⚡ JOGAR NOVAMENTE</button>
+                <button id="res-diff-btn" class="btn">⚙️ ESCOLHER DIFICULDADE</button>
+                <button id="res-rank-btn" class="btn">🏆 VER RANKING</button>
+            </div>
+        </div>
+
+        <!-- 4. TELA DE RANKING -->
+        <div id="screen-ranking" class="screen hidden">
+            <h2>RANKING</h2>
+            <p class="subtitle">Melhores Pontuações Locais</p>
+
+            <div class="rank-tabs">
+                <button class="rank-tab active" data-rank-diff="facil">Fácil</button>
+                <button class="rank-tab" data-rank-diff="normal">Normal</button>
+                <button class="rank-tab" data-rank-diff="dificil">Difícil</button>
+                <button class="rank-tab" data-rank-diff="insano">Insano</button>
+            </div>
+
+            <div class="my-stats-banner">
+                <span>🏆 Recorde Pessoal: <strong id="rank-my-record">0</strong></span>
+                <span>👑 Posição: <strong id="rank-my-pos">#-</strong></span>
+            </div>
+
+            <div class="leaderboard-list" id="leaderboard-list">
+                <!-- Itens do ranking gerados por JS -->
+            </div>
+
+            <button id="rank-back-btn" class="btn" style="margin-top: auto; width: 100%;">
+                ⬅️ VOLTAR AO MENU
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           1. CONTROLADOR DE TEMA (Claro / Escuro)
+           ========================================================================== */
+        class ThemeController {
+            constructor() {
+                this.STORAGE_KEY = 'sequence_theme';
+                this.theme = localStorage.getItem(this.STORAGE_KEY) || 'dark';
+                this.applyTheme();
+            }
+
+            applyTheme() {
+                if (this.theme === 'light') {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    document.getElementById('theme-toggle-btn').innerText = '☀️';
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                    document.getElementById('theme-toggle-btn').innerText = '🌙';
+                }
+            }
+
+            toggle() {
+                this.theme = this.theme === 'dark' ? 'light' : 'dark';
+                localStorage.setItem(this.STORAGE_KEY, this.theme);
+                this.applyTheme();
+            }
+        }
+
+        const themeManager = new ThemeController();
+
+        /* ==========================================================================
+           2. CONTROLADOR DE ÁUDIO SINTETIZADO (Web Audio API)
+           ========================================================================== */
+        class SoundController {
+            constructor() {
+                this.ctx = null;
+                this.enabled = true;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContext();
+                }
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+
+            playCorrect() {
+                if (!this.enabled) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.exponentialRampToValueAtTime(880, now + 0.15); // A5
+
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.25);
+            }
+
+            playWrong() {
+                if (!this.enabled) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.linearRampToValueAtTime(100, now + 0.25);
+
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+
+            playTick() {
+                if (!this.enabled) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(800, now);
+
+                gain.gain.setValueAtTime(0.05, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.05);
+            }
+        }
+
+        const soundManager = new SoundController();
+
+        /* ==========================================================================
+           2. GERENCIADOR DE LEADERBOARD & ARMAZENAMENTO LOCAL
+           ========================================================================== */
+        class LeaderboardManager {
+            constructor() {
+                this.STORAGE_KEY = 'sequence_rush_leaderboard_v1';
+            }
+
+            getScores(difficulty) {
+                try {
+                    const data = localStorage.getItem(this.STORAGE_KEY);
+                    const allScores = data ? JSON.parse(data) : {};
+                    return allScores[difficulty] || [];
+                } catch (e) {
+                    console.error("Erro ao carregar ranking do LocalStorage", e);
+                    return [];
+                }
+            }
+
+            saveScore(difficulty, nickname, score) {
+                try {
+                    const data = localStorage.getItem(this.STORAGE_KEY);
+                    const allScores = data ? JSON.parse(data) : {};
+
+                    if (!allScores[difficulty]) {
+                        allScores[difficulty] = [];
+                    }
+
+                    const newEntry = {
+                        nickname: nickname.trim() || 'Jogador',
+                        score: score,
+                        date: new Date().toLocaleDateString('pt-BR')
+                    };
+
+                    allScores[difficulty].push(newEntry);
+                    // Ordenar por pontuação decrescente
+                    allScores[difficulty].sort((a, b) => b.score - a.score);
+                    // Manter top 50
+                    allScores[difficulty] = allScores[difficulty].slice(0, 50);
+
+                    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(allScores));
+                } catch (e) {
+                    console.error("Erro ao salvar pontuação", e);
+                }
+            }
+
+            getUserBest(difficulty, nickname) {
+                const scores = this.getScores(difficulty);
+                const userScores = scores.filter(s => s.nickname.toLowerCase() === nickname.trim().toLowerCase());
+                if (userScores.length === 0) return 0;
+                return Math.max(...userScores.map(s => s.score));
+            }
+
+            getUserRank(difficulty, nickname, currentScore) {
+                const scores = this.getScores(difficulty);
+                const rank = scores.findIndex(s => s.nickname.toLowerCase() === nickname.trim().toLowerCase() && s.score === currentScore);
+                return rank !== -1 ? rank + 1 : '-';
+            }
+        }
+
+        const leaderboard = new LeaderboardManager();
+
+        /* ==========================================================================
+           3. GERADOR PROCEDURAL DE SEQUÊNCIAS MATEMÁTICAS
+           ========================================================================== */
+        class SequenceGenerator {
+            static generate(difficulty) {
+                let seq = [];
+                let nextVal = 0;
+
+                switch (difficulty) {
+                    case 'facil': {
+                        // Progressão Aritmética simples (Soma ou Subtração)
+                        const step = (Math.floor(Math.random() * 8) + 1) * (Math.random() > 0.3 ? 1 : -1);
+                        const start = Math.floor(Math.random() * 20) + 1;
+                        for (let i = 0; i < 4; i++) {
+                            seq.push(start + i * step);
+                        }
+                        nextVal = start + 4 * step;
+                        break;
+                    }
+
+                    case 'normal': {
+                        // Soma, Subtração, Multiplicação por 2/3 ou Divisão por 2
+                        const type = Math.floor(Math.random() * 4);
+                        if (type === 0) { // PA com passos maiores
+                            const step = (Math.floor(Math.random() * 15) + 5) * (Math.random() > 0.5 ? 1 : -1);
+                            const start = Math.floor(Math.random() * 50) + 10;
+                            for (let i = 0; i < 4; i++) seq.push(start + i * step);
+                            nextVal = start + 4 * step;
+                        } else if (type === 1) { // PG com r=2
+                            const start = Math.floor(Math.random() * 8) + 1;
+                            let curr = start;
+                            for (let i = 0; i < 4; i++) {
+                                seq.push(curr);
+                                curr *= 2;
+                            }
+                            nextVal = curr;
+                        } else if (type === 2) { // PG com r=3
+                            const start = Math.floor(Math.random() * 5) + 1;
+                            let curr = start;
+                            for (let i = 0; i < 4; i++) {
+                                seq.push(curr);
+                                curr *= 3;
+                            }
+                            nextVal = curr;
+                        } else { // Divisão por 2
+                            const start = (Math.floor(Math.random() * 10) + 1) * 16;
+                            let curr = start;
+                            for (let i = 0; i < 4; i++) {
+                                seq.push(curr);
+                                curr = Math.floor(curr / 2);
+                            }
+                            nextVal = curr;
+                        }
+                        break;
+                    }
+
+                    case 'dificil': {
+                        // Alternância de operações (+a, *b, +a, *b) ou PG + offset ou Quadrados
+                        const type = Math.floor(Math.random() * 3);
+                        if (type === 0) { // Alternada: ex: +2, *2, +2, *2
+                            const add = Math.floor(Math.random() * 5) + 1;
+                            const mult = 2;
+                            let curr = Math.floor(Math.random() * 5) + 1;
+                            seq.push(curr);
+                            curr += add; seq.push(curr);
+                            curr *= mult; seq.push(curr);
+                            curr += add; seq.push(curr);
+                            nextVal = curr * mult;
+                        } else if (type === 1) { // Quadrados com deslocamento
+                            const offset = Math.floor(Math.random() * 10) - 5;
+                            const startN = Math.floor(Math.random() * 4) + 1;
+                            for (let i = 0; i < 4; i++) {
+                                const n = startN + i;
+                                seq.push(n * n + offset);
+                            }
+                            const lastN = startN + 4;
+                            nextVal = lastN * lastN + offset;
+                        } else { // Passo crescente (2, 4, 7, 11, 16...)
+                            let curr = Math.floor(Math.random() * 10) + 1;
+                            let step = Math.floor(Math.random() * 3) + 1;
+                            for (let i = 0; i < 4; i++) {
+                                seq.push(curr);
+                                curr += step;
+                                step += 1;
+                            }
+                            nextVal = curr;
+                        }
+                        break;
+                    }
+
+                    case 'insano': {
+                        // Padrões intercalados (A, B, A, B) ou Fibonacci ou Quadráticos complexos
+                        const type = Math.floor(Math.random() * 3);
+                        if (type === 0) { // Fibonacci
+                            let a = Math.floor(Math.random() * 5) + 1;
+                            let b = a + Math.floor(Math.random() * 3);
+                            seq.push(a); seq.push(b);
+                            for (let i = 0; i < 2; i++) {
+                                const c = a + b;
+                                seq.push(c);
+                                a = b;
+                                b = c;
+                            }
+                            nextVal = a + b;
+                        } else if (type === 1) { // Intercalada de duas sequências
+                            const stepA = Math.floor(Math.random() * 4) + 2;
+                            const multB = 2;
+                            let a = Math.floor(Math.random() * 5) + 1;
+                            let b = Math.floor(Math.random() * 5) + 10;
+                            
+                            seq.push(a); // T1
+                            seq.push(b); // T2
+                            a += stepA;
+                            seq.push(a); // T3
+                            b *= multB;
+                            seq.push(b); // T4
+                            
+                            a += stepA;
+                            nextVal = a; // T5 é sequência A
+                        } else { // Alternada *3, -2
+                            let curr = Math.floor(Math.random() * 4) + 2;
+                            seq.push(curr);
+                            curr *= 2; seq.push(curr);
+                            curr -= 3; seq.push(curr);
+                            curr *= 2; seq.push(curr);
+                            nextVal = curr - 3;
+                        }
+                        break;
+                    }
+                }
+
+                // Gerar 3 opções erradas convincentes próximas de nextVal
+                const options = new Set([nextVal]);
+                while (options.size < 4) {
+                    const diff = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1);
+                    const candidate = nextVal + diff;
+                    if (candidate !== nextVal) {
+                        options.add(candidate);
+                    }
+                }
+
+                // Embaralhar opções
+                const shuffledOptions = Array.from(options).sort(() => Math.random() - 0.5);
+
+                return {
+                    sequence: seq,
+                    correctAnswer: nextVal,
+                    options: shuffledOptions
+                };
+            }
+        }
+
+        /* ==========================================================================
+           4. LÓGICA PRINCIPAL DO JOGO
+           ========================================================================== */
+        const CONFIG = {
+            facil: { name: 'Fácil', totalQuestions: 10, timePerQuestion: 20 },
+            normal: { name: 'Normal', totalQuestions: 12, timePerQuestion: 15 },
+            dificil: { name: 'Difícil', totalQuestions: 15, timePerQuestion: 10 },
+            insano: { name: 'Insano', totalQuestions: 20, timePerQuestion: 7 }
+        };
+
+        // Estado do Jogo
+        let currentDifficulty = 'facil';
+        let playerNickname = 'Jogador';
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let streak = 0;
+        let maxStreak = 0;
+        let hitsCount = 0;
+        let totalResponseTime = 0;
+        let currentQuestion = null;
+        let timerInterval = null;
+        let timeRemaining = 0;
+        let questionStartTime = 0;
+        let isAnsweringBlocked = false;
+
+        // Elementos DOM
+        const screens = {
+            menu: document.getElementById('screen-menu'),
+            game: document.getElementById('screen-game'),
+            results: document.getElementById('screen-results'),
+            ranking: document.getElementById('screen-ranking')
+        };
+
+        function showScreen(screenName) {
+            Object.keys(screens).forEach(key => {
+                screens[key].classList.toggle('hidden', key !== screenName);
+            });
+        }
+
+        /* Inicialização e Eventos de UI */
+        document.getElementById('theme-toggle-btn').addEventListener('click', () => {
+            themeManager.toggle();
+        });
+
+        document.querySelectorAll('.diff-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.diff-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                currentDifficulty = card.dataset.diff;
+            });
+        });
+
+        document.getElementById('audio-toggle-btn').addEventListener('click', (e) => {
+            soundManager.enabled = !soundManager.enabled;
+            e.target.innerText = soundManager.enabled ? '🔊' : '🔇';
+        });
+
+        document.getElementById('start-game-btn').addEventListener('click', () => {
+            const nickInput = document.getElementById('player-nickname').value.trim();
+            playerNickname = nickInput || 'Jogador';
+            startGame();
+        });
+
+        document.getElementById('view-ranking-btn').addEventListener('click', () => {
+            renderRanking('facil');
+            showScreen('ranking');
+        });
+
+        /* Botões da Tela de Resultados */
+        document.getElementById('res-restart-btn').addEventListener('click', startGame);
+        document.getElementById('res-diff-btn').addEventListener('click', () => showScreen('menu'));
+        document.getElementById('res-rank-btn').addEventListener('click', () => {
+            renderRanking(currentDifficulty);
+            showScreen('ranking');
+        });
+
+        /* Abas do Ranking */
+        document.querySelectorAll('.rank-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.rank-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                renderRanking(tab.dataset.rankDiff);
+            });
+        });
+
+        document.getElementById('rank-back-btn').addEventListener('click', () => showScreen('menu'));
+
+        /* ==========================================================================
+           5. CICLO DE VIDA DO JOGO (GAMEPLAY)
+           ========================================================================== */
+        function startGame() {
+            currentQuestionIndex = 0;
+            score = 0;
+            streak = 0;
+            maxStreak = 0;
+            hitsCount = 0;
+            totalResponseTime = 0;
+            isAnsweringBlocked = false;
+
+            updateHUD();
+            showScreen('game');
+            nextQuestion();
+        }
+
+        function updateHUD() {
+            const config = CONFIG[currentDifficulty];
+            document.getElementById('hud-question-count').innerText = `${currentQuestionIndex + 1}/${config.totalQuestions}`;
+            document.getElementById('hud-score').innerText = score.toLocaleString('pt-BR');
+            
+            // Render de Combo com ícone de fogo
+            let comboText = `${streak}x`;
+            if (streak >= 10) comboText += ' 🔥x5';
+            else if (streak >= 5) comboText += ' 🔥x3';
+            else if (streak >= 3) comboText += ' 🔥x2';
+            
+            document.getElementById('hud-combo').innerText = comboText;
+        }
+
+        function nextQuestion() {
+            const config = CONFIG[currentDifficulty];
+            if (currentQuestionIndex >= config.totalQuestions) {
+                endGame();
+                return;
+            }
+
+            isAnsweringBlocked = false;
+            document.getElementById('feedback-toast').innerText = '';
+            document.getElementById('feedback-toast').className = 'feedback-toast';
+
+            // Gerar Sequência
+            currentQuestion = SequenceGenerator.generate(currentDifficulty);
+
+            // Renderizar Sequência
+            const seqDisplay = document.getElementById('sequence-display');
+            seqDisplay.innerHTML = '';
+            currentQuestion.sequence.forEach(num => {
+                const el = document.createElement('div');
+                el.className = 'seq-num';
+                el.innerText = num;
+                seqDisplay.appendChild(el);
+            });
+
+            // Target "?"
+            const targetEl = document.createElement('div');
+            targetEl.className = 'seq-num seq-target';
+            targetEl.innerText = '?';
+            seqDisplay.appendChild(targetEl);
+
+            // Renderizar Opções
+            const optionsGrid = document.getElementById('options-grid');
+            optionsGrid.innerHTML = '';
+            currentQuestion.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.addEventListener('click', () => handleAnswer(opt, btn));
+                optionsGrid.appendChild(btn);
+            });
+
+            updateHUD();
+            startTimer();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            const config = CONFIG[currentDifficulty];
+            timeRemaining = config.timePerQuestion;
+            questionStartTime = Date.now();
+
+            const timerBar = document.getElementById('timer-bar');
+            timerBar.style.width = '100%';
+            timerBar.style.background = 'linear-gradient(90deg, #10b981, #34d399)';
+
+            const intervalMs = 100;
+            const totalMs = config.timePerQuestion * 1000;
+            let elapsedMs = 0;
+
+            timerInterval = setInterval(() => {
+                elapsedMs += intervalMs;
+                timeRemaining = Math.max(0, config.timePerQuestion - (elapsedMs / 1000));
+                
+                const pct = Math.max(0, (timeRemaining / config.timePerQuestion) * 100);
+                timerBar.style.width = `${pct}%`;
+
+                if (pct < 30) {
+                    timerBar.style.background = 'var(--accent-red)';
+                } else if (pct < 60) {
+                    timerBar.style.background = 'var(--accent-gold)';
+                }
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeOut();
+                }
+            }, intervalMs);
+        }
+
+        function handleAnswer(selectedVal, btnElement) {
+            if (isAnsweringBlocked) return;
+            isAnsweringBlocked = true;
+            clearInterval(timerInterval);
+
+            const responseTime = (Date.now() - questionStartTime) / 1000;
+            totalResponseTime += responseTime;
+
+            const isCorrect = (selectedVal === currentQuestion.correctAnswer);
+            const toast = document.getElementById('feedback-toast');
+
+            if (isCorrect) {
+                soundManager.playCorrect();
+                btnElement.classList.add('correct');
+                hitsCount++;
+                streak++;
+                if (streak > maxStreak) maxStreak = streak;
+
+                // Cálculo de Pontuação: Base + Bônus de Velocidade + Multiplicador de Combo
+                let comboMultiplier = 1;
+                if (streak >= 10) comboMultiplier = 5;
+                else if (streak >= 5) comboMultiplier = 3;
+                else if (streak >= 3) comboMultiplier = 2;
+
+                const config = CONFIG[currentDifficulty];
+                const speedBonus = Math.round((timeRemaining / config.timePerQuestion) * 300);
+                const pointsGained = (100 + speedBonus) * comboMultiplier;
+                score += pointsGained;
+
+                toast.innerText = `+${pointsGained} Pts! (Combo x${comboMultiplier})`;
+                toast.classList.add('success');
+            } else {
+                soundManager.playWrong();
+                btnElement.classList.add('wrong');
+                streak = 0; // Quebra o combo
+
+                // Destacar resposta correta
+                document.querySelectorAll('.option-btn').forEach(btn => {
+                    if (parseInt(btn.innerText) === currentQuestion.correctAnswer) {
+                        btn.classList.add('correct');
+                    }
+                });
+
+                toast.innerText = `Incorreto! A resposta era ${currentQuestion.correctAnswer}`;
+                toast.classList.add('error');
+            }
+
+            updateHUD();
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                nextQuestion();
+            }, 1300);
+        }
+
+        function handleTimeOut() {
+            if (isAnsweringBlocked) return;
+            isAnsweringBlocked = true;
+
+            soundManager.playWrong();
+            streak = 0;
+
+            const config = CONFIG[currentDifficulty];
+            totalResponseTime += config.timePerQuestion;
+
+            // Destacar resposta correta
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                if (parseInt(btn.innerText) === currentQuestion.correctAnswer) {
+                    btn.classList.add('correct');
+                }
+            });
+
+            const toast = document.getElementById('feedback-toast');
+            toast.innerText = `Tempo Esgotado! A resposta era ${currentQuestion.correctAnswer}`;
+            toast.classList.add('error');
+
+            updateHUD();
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                nextQuestion();
+            }, 1400);
+        }
+
+        /* ==========================================================================
+           6. TELA DE RESULTADOS & RANKING
+           ========================================================================== */
+        function endGame() {
+            const config = CONFIG[currentDifficulty];
+            const accuracy = Math.round((hitsCount / config.totalQuestions) * 100);
+            const avgTime = (totalResponseTime / config.totalQuestions).toFixed(1);
+
+            document.getElementById('res-score').innerText = score.toLocaleString('pt-BR');
+            document.getElementById('res-hits').innerText = `${hitsCount}/${config.totalQuestions}`;
+            document.getElementById('res-accuracy').innerText = `${accuracy}%`;
+            document.getElementById('res-combo').innerText = `${maxStreak} 🔥`;
+            document.getElementById('res-avg-time').innerText = `${avgTime}s`;
+
+            // Salvar no Ranking
+            leaderboard.saveScore(currentDifficulty, playerNickname, score);
+
+            showScreen('results');
+        }
+
+        function renderRanking(diffKey) {
+            const scores = leaderboard.getScores(diffKey);
+            const listEl = document.getElementById('leaderboard-list');
+            listEl.innerHTML = '';
+
+            const myBest = leaderboard.getUserBest(diffKey, playerNickname);
+            const myRank = leaderboard.getUserRank(diffKey, playerNickname, myBest);
+
+            document.getElementById('rank-my-record').innerText = myBest.toLocaleString('pt-BR');
+            document.getElementById('rank-my-pos').innerText = myRank !== '-' ? `#${myRank}` : '-';
+
+            if (scores.length === 0) {
+                listEl.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum registro nesta dificuldade ainda.</div>';
+                return;
+            }
+
+            scores.forEach((item, index) => {
+                const el = document.createElement('div');
+                let topClass = '';
+                let badge = `${index + 1}`;
+                if (index === 0) { topClass = 'top-1'; badge = '🥇'; }
+                else if (index === 1) { topClass = 'top-2'; badge = '🥈'; }
+                else if (index === 2) { topClass = 'top-3'; badge = '🥉'; }
+
+                el.className = `rank-item ${topClass}`;
+                el.innerHTML = `
+                    <div class="rank-user">
+                        <span class="rank-badge">${badge}</span>
+                        <span>${escapeHtml(item.nickname)}</span>
+                    </div>
+                    <span class="rank-score">${item.score.toLocaleString('pt-BR')} pts</span>
+                `;
+                listEl.appendChild(el);
+            });
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>"']/g, function(m) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                }[m];
+            });
+        }
+    </script>
+</body>
+</html>
